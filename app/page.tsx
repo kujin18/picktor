@@ -1,65 +1,285 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+import { useEffect, useState } from "react";
+
+import LoginScreen from "@/components/LoginScreen";
+import SignupModal from "@/components/SignupModal";
+import DashboardHeader from "@/components/DashboardHeader";
+import DashboardStats from "@/components/DashboardStats";
+import MissionSection from "@/components/MissionSection";
+import ActorSection from "@/components/ActorSection";
+import ActorDetailModal from "@/components/ActorDetailModal";
+import ReportModal from "@/components/ReportModal";
+
+import useActors from "@/hooks/useActors";
+import useReports from "@/hooks/useReports";
+import useAuth from "@/hooks/useAuth";
+import useSignup from "@/hooks/useSignup";
+
+type Actor = {
+  name: string;
+  age: number;
+  tone: string;
+  tags?: string[];
+};
+
+export default function PicktorPrototype() {
+  const [actorCount, setActorCount] =
+    useState(0);
+
+  const [selectedActor, setSelectedActor] =
+    useState<Actor | null>(null);
+
+  const [showActorMenu, setShowActorMenu] =
+    useState(false);
+
+  // 배우
+  const {
+    actors,
+    page,
+    setPage,
+
+    search,
+    setSearch,
+
+    selectedFilter,
+    setSelectedFilter,
+  } = useActors();
+
+  // 신고
+  const {
+    reports,
+    setReports,
+
+    showReports,
+    setShowReports,
+  } = useReports();
+
+  // 로그인
+  const {
+    role,
+    setRole,
+
+    email,
+    setEmail,
+
+    password,
+    setPassword,
+
+    login,
+    logout,
+  } = useAuth();
+
+  // 회원가입
+  const {
+    showSignup,
+    setShowSignup,
+
+    signupRole,
+    setSignupRole,
+
+    signupEmail,
+    setSignupEmail,
+
+    signupPassword,
+    setSignupPassword,
+
+    realName,
+    setRealName,
+
+    stageName,
+    setStageName,
+
+    phone,
+    setPhone,
+
+    bio,
+    setBio,
+  } = useSignup();
+
+  // 배우 수
+  useEffect(() => {
+  fetch("/api/actors/count")
+    .then(async (res) => {
+      if (!res.ok) {
+        return { count: 0 };
+      }
+
+      return res.json();
+    })
+    .then((data) => {
+      setActorCount(
+        Number(data.count)
+      );
+    });
+}, []);
+
+useEffect(() => {
+  fetch("/api/reports")
+    .then(async (res) => {
+      if (!res.ok) {
+        return [];
+      }
+
+      return res.json();
+    })
+    .then((data) => {
+      setReports(data);
+    })
+    .catch(() => {
+      setReports([]);
+    });
+}, [setReports]);
+
+useEffect(() => {
+  fetch("/api/auth/me")
+    .then(async (res) => {
+      if (!res.ok) {
+        return { success: false };
+      }
+
+      return res.json();
+    })
+    .then((data) => {
+      if (
+        data.success &&
+        data.user
+      ) {
+        setRole(
+          data.user.role
+        );
+      }
+    });
+}, [setRole]);
+
+  // 게스트 화면
+  if (role === "guest") {
+    return (
+      <>
+        <LoginScreen
+          email={email}
+          password={password}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          onLogin={login}
+          onActorSignup={() => {
+            setSignupRole("actor");
+            setShowSignup(true);
+          }}
+          onAgencySignup={() => {
+            setSignupRole("agency");
+            setShowSignup(true);
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <SignupModal
+          showSignup={showSignup}
+          signupRole={signupRole}
+
+          signupEmail={signupEmail}
+          setSignupEmail={setSignupEmail}
+
+          signupPassword={signupPassword}
+          setSignupPassword={
+            setSignupPassword
+          }
+
+          realName={realName}
+          setRealName={setRealName}
+
+          stageName={stageName}
+          setStageName={setStageName}
+
+          phone={phone}
+          setPhone={setPhone}
+
+          bio={bio}
+          setBio={setBio}
+
+          setShowSignup={
+            setShowSignup
+          }
+        />
+      </>
+    );
+  }
+
+  // 메인 화면
+  return (
+    <div className="min-h-screen bg-zinc-950 text-white p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+
+        {/* 헤더 */}
+        <DashboardHeader
+          role={role}
+          showActorMenu={
+            showActorMenu
+          }
+          setShowActorMenu={
+            setShowActorMenu
+          }
+          onLogout={logout}
+          onWithdraw={() => {
+            alert("회원 탈퇴 완료");
+
+            setRole("guest");
+          }}
+        />
+
+        {/* 통계 */}
+        <DashboardStats
+          role={role}
+          actorCount={actorCount}
+          reports={reports}
+          setReports={setReports}
+          showReports={showReports}
+          setShowReports={
+            setShowReports
+          }
+        />
+
+        {/* 미션 */}
+        <MissionSection role={role} />
+
+        {/* 배우 리스트 */}
+        <ActorSection
+          actors={actors}
+          page={page}
+          setPage={setPage}
+          search={search}
+          setSearch={setSearch}
+          selectedFilter={
+            selectedFilter
+          }
+          setSelectedFilter={
+            setSelectedFilter
+          }
+          onSelectActor={
+            setSelectedActor
+          }
+        />
+
+        {/* 배우 상세 */}
+        <ActorDetailModal
+          actor={selectedActor}
+          role={role}
+          onClose={() =>
+            setSelectedActor(null)
+          }
+        />
+
+        {/* 신고 목록 */}
+        <ReportModal
+          role={role}
+          showReports={showReports}
+          reports={reports}
+          setReports={setReports}
+          onClose={() =>
+            setShowReports(false)
+          }
+        />
+
+      </div>
     </div>
   );
 }
