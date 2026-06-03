@@ -1,4 +1,5 @@
 import MissionCard from "@/components/MissionCard";
+import { missions } from "@/data/missions";
 
 type Props = {
   role:
@@ -12,10 +13,21 @@ export default function MissionSection({
   role,
 }: Props) {
   return (
-    <MissionCard
-      title="현재 미션"
-      description="'이별 직전 감정 독백 연기' - 60초 제한"
-      role={role}
-    />
+    <div className="space-y-4">
+      <h2 className="text-2xl font-semibold">
+        현재 미션
+      </h2>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {missions.map((mission) => (
+          <MissionCard
+            key={mission.id}
+            title={mission.title}
+            description={mission.description}
+            role={role}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

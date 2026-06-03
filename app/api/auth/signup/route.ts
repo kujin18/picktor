@@ -47,20 +47,22 @@ export async function POST(
           email,
           password,
           role,
-          realName,
-          stageName,
+          // realName,
+          // stageName,
           phone,
-          bio,
+          // bio,
         },
       });
 
     // 배우 계정이면 Actor 생성
     if (role === "actor") {
-      await prisma.actor.create({
+      await prisma.actorProfile.create({
         data: {
-          name: stageName,
-          age: 20,
-          tone: "미정",
+           userId: user.id,
+           name: stageName,
+          // name: stageName,
+          // age: 20,
+          // tone: "미정",
         },
       });
     }

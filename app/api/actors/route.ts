@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const actors =
-      await prisma.actor.findMany({
+      await prisma.actorProfile.findMany({
         orderBy: {
           id: "desc",
         },

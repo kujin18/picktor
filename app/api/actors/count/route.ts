@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const count =
-      await prisma.actor.count();
+      await prisma.actorProfile.count();
 
     return NextResponse.json({
       count,

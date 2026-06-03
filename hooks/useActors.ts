@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-
+import { mockActors} from "../data/actors";
 type Actor = {
+   id: string;
   name: string;
   age: number;
   tone: string;
@@ -10,7 +11,8 @@ type Actor = {
 };
 
 export default function useActors() {
-  const [actors] = useState<Actor[]>([]);
+  
+  const [actors] = useState<Actor[]>(mockActors);
 
   const [page, setPage] = useState(0);
 
