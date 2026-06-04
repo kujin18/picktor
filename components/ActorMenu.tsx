@@ -35,7 +35,7 @@ export default function ActorMenu({
   }, []);
 
   return (
-    <div className="absolute right-24 top-16 bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-3 w-72 z-50 shadow-2xl">
+    <div className="absolute right-0 top-14 bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-3 w-72 z-50 shadow-2xl">
 
       {/* 프로필 */}
       <div className="flex items-center gap-3 pb-4 border-b border-zinc-800">

@@ -48,14 +48,19 @@ export default function useAuth() {
   };
 
   const logout = async () => {
-  await fetch(
-    "/api/auth/logout",
-    {
-      method: "POST",
-    }
-  );
+    setRole("guest");
+    
+    try {
+    await fetch(
+      "/api/auth/logout",
+      {
+        method: "POST",
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
 
-  setRole("guest");
 };
 
   return {

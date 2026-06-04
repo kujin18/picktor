@@ -8,6 +8,9 @@ type Props = {
 
   onActorSignup: () => void;
   onAgencySignup: () => void;
+
+  onActorDemo: () => void;
+  onCasterDemo: () => void;
 };
 
 export default function LoginScreen({
@@ -18,6 +21,8 @@ export default function LoginScreen({
   onLogin,
   onActorSignup,
   onAgencySignup,
+  onActorDemo,
+  onCasterDemo,
 }: Props) {
   return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center p-6">
@@ -30,6 +35,12 @@ export default function LoginScreen({
           <h1 className="text-6xl font-black">
             Picktor
           </h1>
+
+          <div className="mt-3 flex justify-center">
+            <span className="px-3 py-1 text-xs rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
+                MVP Prototype
+            </span>
+          </div>
 
           <p className="text-zinc-400 mt-4 text-lg">
             배우 60초 미션 기반 캐스팅 플랫폼
@@ -94,6 +105,28 @@ export default function LoginScreen({
 
           </div>
 
+            {/* 체험하기 */}
+<div className="mt-8">
+
+  <div className="flex gap-4">
+
+    <button
+      onClick={onActorDemo}
+      className="flex-1 border border-zinc-700 rounded-2xl py-3 text-sm hover:bg-zinc-800 transition"
+    >
+      배우 체험하기
+    </button>
+
+    <button
+      onClick={onCasterDemo}
+      className="flex-1 border border-zinc-700 rounded-2xl py-3 text-sm hover:bg-zinc-800 transition"
+    >
+      캐스터 체험하기
+    </button>
+
+  </div>
+
+</div>
         </div>
 
       </div>

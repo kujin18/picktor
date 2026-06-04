@@ -6,6 +6,8 @@ import LoginScreen from "@/components/LoginScreen";
 import SignupModal from "@/components/SignupModal";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardStats from "@/components/DashboardStats";
+import ActorHome from "@/components/ActorHome";
+import CasterHome from "@/components/CasterHome";
 import MissionSection from "@/components/MissionSection";
 import ActorSection from "@/components/ActorSection";
 import ActorDetailModal from "@/components/ActorDetailModal";
@@ -170,6 +172,8 @@ useEffect(() => {
             setSignupRole("agency");
             setShowSignup(true);
           }}
+           onActorDemo={() => setRole("actor")}
+           onCasterDemo={() => setRole("agency")}
         />
 
         <SignupModal
@@ -204,6 +208,15 @@ useEffect(() => {
     );
   }
 
+  // 배우 홈
+if (role === "actor") {
+  return <ActorHome />;
+}
+
+// 캐스터 홈
+if (role === "agency") {
+  return <CasterHome />;
+}
   // 메인 화면
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-8">
@@ -238,6 +251,7 @@ useEffect(() => {
           }
         />
 
+          
         {/* 미션 */}
         <MissionSection role={role} />
 

@@ -20,121 +20,122 @@ enum CastingStatus {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  email    String? @unique
-  phone    String  @unique
-  password String
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  phone        String   @unique
+  password     String
 
-  role UserRole @default(ACTOR)
+  role         UserRole @default(ACTOR)
 
   actorProfile ActorProfile?
 
-  bookmarks Bookmark[]
+  bookmarks    Bookmark[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model ActorProfile {
-  id String @id @default(cuid())
+  id            String   @id @default(cuid())
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
 
-  name      String
-  birthYear Int?
+  name          String
+  birthYear     Int?
 
-  gender String?
+  gender        String?
 
-  height Int?
-  weight Int?
+  height        Int?
+  weight        Int?
 
-  region String?
+  region        String?
 
-  profileImage String?
+  profileImage  String?
 
-  introduction String?
+  introduction  String?
 
-  videos Video[]
+  videos        Video[]
 
-  tags ActorTag[]
+  tags          ActorTag[]
 
   castingRequests CastingRequest[]
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Bookmark  Bookmark[]
+  bookmarks     Bookmark[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Video {
-  id String @id @default(cuid())
+  id            String   @id @default(cuid())
 
-  actorId String
-  actor   ActorProfile @relation(fields: [actorId], references: [id])
+  actorId       String
+  actor         ActorProfile @relation(fields: [actorId], references: [id])
 
-  title String
+  title         String
 
-  description String?
+  description   String?
 
-  videoUrl String
+  videoUrl      String
 
-  thumbnailUrl String?
+  thumbnailUrl  String?
 
-  duration Int?
+  duration      Int?
 
-  createdAt DateTime @default(now())
+  createdAt     DateTime @default(now())
 }
 
 model Tag {
-  id String @id @default(cuid())
+  id            String   @id @default(cuid())
 
-  name String @unique
+  name          String   @unique
 
-  actors ActorTag[]
+  actors        ActorTag[]
 }
 
 model ActorTag {
-  id String @id @default(cuid())
+  id            String   @id @default(cuid())
 
-  actorId String
-  tagId   String
+  actorId       String
+  tagId         String
 
-  actor ActorProfile @relation(fields: [actorId], references: [id])
-  tag   Tag          @relation(fields: [tagId], references: [id])
+  actor         ActorProfile @relation(fields: [actorId], references: [id])
+  tag           Tag          @relation(fields: [tagId], references: [id])
 
   @@unique([actorId, tagId])
 }
 
 model Bookmark {
-  id String @id @default(cuid())
+  id            String @id @default(cuid())
 
-  userId  String
-  actorId String
+  userId        String
+  actorId       String
 
-  user  User         @relation(fields: [userId], references: [id])
-  actor ActorProfile @relation(fields: [actorId], references: [id])
+  user          User         @relation(fields: [userId], references: [id])
+  actor         ActorProfile @relation(fields: [actorId], references: [id])
 
   @@unique([userId, actorId])
 }
 
 model CastingRequest {
-  id String @id @default(cuid())
+  id            String @id @default(cuid())
 
-  actorId String
+  actorId       String
 
-  actor ActorProfile @relation(fields: [actorId], references: [id])
+  actor         ActorProfile @relation(fields: [actorId], references: [id])
 
-  companyName String
+  companyName   String
 
-  managerName String?
+  managerName   String?
 
-  email String?
+  email         String?
 
-  phone String?
+  phone         String?
 
-  message String
+  message       String
 
-  status CastingStatus @default(PENDING)
+  status        CastingStatus @default(PENDING)
 
-  createdAt DateTime @default(now())
+  createdAt     DateTime @default(now())
 }
